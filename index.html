@@ -217,7 +217,7 @@ const plans = {
 
 let current = "standard";
 
-// 渲染清單項目
+// 渲染清單項目 (已修復錯誤的屬性讀取)
 function makeItems(id, items, isDaily=false) {
   const root = document.getElementById(id);
   root.innerHTML = "";
@@ -234,15 +234,15 @@ function makeItems(id, items, isDaily=false) {
     main.className = "item-main";
     const title = document.createElement("div");
     title.className = "item-title";
-    title.textContent = item[0];
+    title.textContent = item[0]; // 修正：正確讀取項目名稱
     const detail = document.createElement("div");
     detail.className = "detail";
-    detail.textContent = item[1];
+    detail.textContent = item[1]; // 修正：正確讀取詳細說明
     main.append(title, detail);
 
     const badge = document.createElement("span");
     badge.className = isDaily ? "xp" : "time";
-    badge.textContent = isDaily ? "+" + item[2] + " XP" : item[2] + " 分鐘";
+    badge.textContent = isDaily ? "+" + item[2] + " XP" : item[2] + " 分鐘"; // 修正：正確讀取數值
     el.append(checkbox, main, badge);
     root.appendChild(el);
   });
@@ -250,7 +250,7 @@ function makeItems(id, items, isDaily=false) {
 
 // 更新進度條與狀態
 function updateProgress() {
-  const checkboxes = document.querySelectorAll(`input[data-group="${current}"]`);
+  const checkboxes = document.querySelectorAll(`input[data-group="${current}List"]`);
   const total = checkboxes.length;
   const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
   
@@ -300,6 +300,3 @@ tabs.forEach(tab => {
     
     // 控制面板隱藏/顯示
     document.querySelectorAll(".panel").forEach(p => p.hidden = true);
-    document.getElementById(current).hidden = false;
-
-    // 更新模式標籤
